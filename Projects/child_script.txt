@@ -1,0 +1,6 @@
+if (sim_call_type==sim_childscriptcall_initialization) then		
+	if (simGetScriptExecutionCount()==0) then		
+		simExtRemoteApiStart(20200)		
+		simLaunchExecutable("beta.exe",'20200',1)
+	end
+end	
