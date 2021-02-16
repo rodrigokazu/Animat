@@ -1,4 +1,4 @@
-# RATOCA platform developed at the Reading Uni by Dr Rodrigo Siqueira # 
+# RATOCA platform by Dr Rodrigo Siqueira # 
 
 
 The aim of the system is to provide a complete integration between a Multi Electrode Array (MEA) with neuronal cells and a mobile robot. The biological signals of the cells will be acquired by a software named MC_Rack, from the MultiChannel Systems. When MC_Rack detects specific signal patterns on the electrodes, it creates a .mcd file that contains, among other types of data, a digital bit associated with the channel (electrode) that reached a predefined voltage threshold. A MATLAB script was developed in order to read every .mcd file that is created, and evaluate, for each of them, which channel was triggered. When the script acquires this information, it creates a .txt file, that contains the digital bit, the channel ID, and the number of the .mcd file that was read.
