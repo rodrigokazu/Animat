@@ -15,17 +15,14 @@ n = csim('create', 'LifNeuron');
 % Setting specific parameters %
 %-----------------------------------------------------------------------%
 
-csim('set','randSeed',123456);
-
 %Change the absolute refractory period of the LIF neuron n to be of length
 %2 ms and add a noisy current of 50 nA. 
 
-csim('set',n,'Trefract',0.002,'Inoise',50e-9);
+csim('set',n,'Trefract',0.002,'Inoise',50e-9,'Vthresh', -0.055);
 
 % For the dynamic synapse, parameters for depressing behaviour:
 
-%csim('set',s,'W',10,'U',0.1,'D',1,'F',0.05);
-%csim('set',s,'u0',0.1,'r0',1);
+%csim('set',s,'W',10,'U',0.1,'D',1,'F',0.05, 'u0',0.1,'r0',1);
 
 csim('set',s,'W',2000e-9); % Synaptic weight from the CSIM tutorial
 
@@ -92,13 +89,14 @@ title('Postsynaptic Response');
 
 subplot(3,1,3);
 
-
-plot(t.channel(2).dt:t.channel(2).dt:Tsim,t.channel(2).data)
-
 st=t.channel(3).data;
 line([st; st],[-0.045; -0.015]*ones(size(st)),'Color','k'); %Spikes
 
-ylabel([t.channel(2).fieldName ' [V]']);
+mV = t.channel(2).data*1000 %Converting to mV
+plot(t.channel(2).dt:t.channel(2).dt:Tsim,mV)
+
+
+ylabel([t.channel(2).fieldName ' [mV]']);
 xlabel('Time [s]');
 title('Membrane Potential and Spikes');
 

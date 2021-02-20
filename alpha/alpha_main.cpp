@@ -622,6 +622,7 @@ DWORD WINAPI threadGenerateStimuli(void)
 /* *************************************************************
 	    Creates a configuration screen to change parameters
 **************************************************************** */
+
 void configurationScreen(void)
 {
 	while(1)
