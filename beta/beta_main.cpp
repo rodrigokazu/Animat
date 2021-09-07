@@ -103,7 +103,7 @@ int main(int argc, char *argv[])
 		/*****************************************************
 		 Creates the threads and waits for their finalization.
 		****************************************************** */
-		OpenThreads(ClientSock,clientID); 
+		HandleTCPClient(ClientSock,clientID); 
 		
 		// Close connecting socket (client).
 		closesocket(ClientSock);
@@ -131,7 +131,7 @@ int main(int argc, char *argv[])
 /* *************************************************
     Function that creates all the threads.
 **************************************************** */
-void OpenThreads (int ClientSock, int clientID)
+void HandleTCPClient (int ClientSock, int clientID)
 {
 
 	// Creation of receiving thread.
@@ -254,6 +254,7 @@ DWORD WINAPI threadReceive(LPVOID sClientSock)
 		// Checks if it is time to terminate the thread.
 		if(endApplication == true)
 		{
+			printf("1/5\n");
 			_endthreadex(0);
 			return(0);
 		}
@@ -279,6 +280,7 @@ DWORD WINAPI threadReceive(LPVOID sClientSock)
 		}		
 	}	
 
+	printf("1/5\n");
 	_endthreadex(0);
 	return(0);
 }
@@ -389,11 +391,13 @@ DWORD WINAPI threadSend(LPVOID sClientSock)
 		// Checks if it is time to terminate the thread.
 		if(endApplication == true)
 		{
+			printf("2/5\n");
 			_endthreadex(0);
 			return(0);
 		}
 	}
 
+	printf("2/5\n");
 	_endthreadex(0);
 	return(0);
 }
@@ -485,12 +489,17 @@ DWORD WINAPI threadTurn(LPVOID clientID)
 			WaitForSingleObject(hSim,INFINITE);			
 			simxStopSimulation((int)clientID,simx_opmode_oneshot);
 			Sleep(1000);
-			ReleaseMutex(hSim);		
+			ReleaseMutex(hSim);			
+
+			printf("3/5\n");
 			_endthreadex(0);
 			return(0);
 		}
+
+		//extApi_sleepMs(5); // necessary?
 	}
 
+	printf("3/5\n");
 	_endthreadex(0);
 	return(0);
 }
@@ -699,11 +708,13 @@ DWORD WINAPI threadSensor(LPVOID clientID)
 		// Checks if it is time to terminate the thread.
 		if(endApplication == true)
 		{
+			printf("4/5\n");
 			_endthreadex(0);
 			return(0);
 		}
 	}
 
+	printf("4/5\n");
 	_endthreadex(0);
 	return(0);
 }
@@ -740,7 +751,7 @@ DWORD WINAPI threadReadKeyboard(LPVOID)
 
 			case ENTER:
 
-				// DEBUG to check the speed of the wheels!!!
+				// DEBUG !!!
 				printf("W_L = %d | W_R = %d\n",leftWheel,rightWheel);
 
 				if( (startRobot == false) && (spacePressed == false) )
@@ -808,6 +819,7 @@ DWORD WINAPI threadSpeedDecoding(void)
 		//case 3:
 	}
 		
+	printf("5/5\n");
 	_endthreadex(0);
 	return(0);
 }
@@ -841,7 +853,7 @@ void configurationScreen(void)
 		}
 		else if(decodingMethod == 2)
 		{
-			printf("[   M   ] Speed decoding method | Winner-Takes-All (C_L = %.2f | C_R = %.2f)\n", C_L, C_R);
+			printf("[   M   ] Speed decoding method | Winner-Takes-All\n");
 		}
 
 		printf("[   S   ] Maximum robot speed | %d rad/s\n", w_0);
@@ -917,7 +929,6 @@ void configurationDecodingMethod(void)
 		else if( (char)keyboard == 'w' || (char)keyboard == 'W' )
 		{
 			decodingMethod = 2;
-			adjustParameters();
 			break;
 		}
 
@@ -926,74 +937,6 @@ void configurationDecodingMethod(void)
 			break;
 		}
 
-		else
-		{
-			printf("Invalid option.\n\n");
-			Sleep(1000);
-		}
-	}
-}
-
-/* *****************************************************
-	      Adjust the Winner-Takes-All Parameters
-******************************************************** */
-void adjustParameters(void)
-{
-	char str[10];
-
-	// LEFT WHEEL PARAMETER
-	while(1)
-	{
-		system("cls");
-		printf("BETA Communication Software\n\n");
-		printf("CONFIGURATIONS -  Winner-Takes-All Parameters\n");
-		printf("Type the coefficient of the LEFT WHEEL and press ENTER >> ");
-
-		memset(str, '\0',  sizeof(str));
-		scanf_s("%s", str, _countof(str));
-
-		if(sscanf_s(str, "%f", &C_L) != 0) // checks if the input is float type
-		{
-			if(w_0 > 0)
-			{
-				break; // valid option
-			}
-			else
-			{
-				printf("Invalid option.\n\n");
-				Sleep(1000);
-			}
-		}
-		else
-		{
-			printf("Invalid option.\n\n");
-			Sleep(1000);
-		}
-	}
-
-	// RIGHT WHEEL PARAMETER
-	while(1)
-	{
-		system("cls");
-		printf("BETA Communication Software\n\n");
-		printf("CONFIGURATIONS -  Winner-Takes-All Parameters\n");
-		printf("Type the coefficient of the RIGHT WHEEL and press ENTER >> ");
-
-		memset(str, '\0',  sizeof(str));
-		scanf_s("%s", str, _countof(str));
-
-		if(sscanf_s(str, "%f", &C_R) != 0) // checks if the input is float type
-		{
-			if(w_0 > 0)
-			{
-				break; // valid option
-			}
-			else
-			{
-				printf("Invalid option.\n\n");
-				Sleep(1000);
-			}
-		}
 		else
 		{
 			printf("Invalid option.\n\n");
@@ -1230,37 +1173,31 @@ int discreteDecoding()
 int WTADecoding()
 {
 	short int w_L = w_0; // current left speed
-	short int w_R = w_0; // current right speed		
+	short int w_R = w_0; // current right speed
+
+	float C_L = 5; // normalized coefficient	
+	float C_R = 5; // normalized coefficient	
 
 	// Infinite loop that the thread runs forever.
 	while(1)
 	{
-		if( leftFiringRate == 0 && rightFiringRate == 0 )
+		// The implementation of the Winner-Takes-All Method is placed here:
+		if( w_L >= w_R )
 		{
-			w_L = w_0;
-			w_R = w_0;
+			w_L = w_0 - C_L * leftFiringRate;
 		}
-
 		else
 		{
-			// The implementation of the Winner-Takes-All Method is placed here:
-			if( w_L >= w_R )
-			{
-				w_L = w_0 - C_L * leftFiringRate;
-			}
-			else
-			{
-				w_L = - w_b;
-			}
+			w_L = - w_b;
+		}
 
-			if( w_R >= w_L )
-			{
-				w_R = w_0 - C_R * rightFiringRate;
-			}
-			else
-			{
-				w_R = - w_b;
-			}
+		if( w_R >= w_L )
+		{
+			w_R = w_0 - C_R * rightFiringRate;
+		}
+		else
+		{
+			w_R = - w_b;
 		}
 
 		// DEBUG !

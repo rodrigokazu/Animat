@@ -15,7 +15,7 @@
             Main thread. All starts here!
 The main purpose of the Main thread is:
 > Initialize the synchronization objects (mutexes)
-> Connect to Beta Application (TCP server)
+> Connect to Beta Application (TCP server)	
 > Open all the threads and wait for their finalization
 **************************************************** */
 void main()
@@ -83,7 +83,8 @@ void main()
    // Build the address structure that will be used in the connection with the TCP server.
    ServerAddr.sin_family = AF_INET;
    ServerAddr.sin_port = htons(port);    
-   ServerAddr.sin_addr.s_addr = inet_addr(ipaddr);
+   //InetPton(AF_INET, (PCWSTR)ipaddr, &ServerAddr.sin_addr.s_addr); //We'll need to test this, error is being suppressed by line 12 in alpha_main.h
+   ServerAddr.sin_addr.s_addr = inet_addr(ipaddr); //This way has been deprecated
 
 
    // Main loop - creates the socket and establishes connection with TCP server (BETA application).
