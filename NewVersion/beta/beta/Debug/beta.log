@@ -1,0 +1,19 @@
+﻿  beta_main.cpp
+E:\Documents\Jobs\CompNeuro\beta\beta\beta_main.h(123,2): warning C4273: 'SetConsoleCtrlHandler': inconsistent dll linkage
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\consoleapi.h(283,1): message : see previous definition of 'SetConsoleCtrlHandler'
+E:\Documents\Jobs\CompNeuro\beta\beta\beta_main.cpp(587,18): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+E:\Documents\Jobs\CompNeuro\beta\beta\beta_main.cpp(966,20): warning C4477: 'sscanf_s' : format string '%d' requires an argument of type 'int *', but variadic argument 1 has type 'short *'
+E:\Documents\Jobs\CompNeuro\beta\beta\beta_main.cpp(966,20): message : consider using '%hd' in the format string
+E:\Documents\Jobs\CompNeuro\beta\beta\beta_main.cpp(1023,22): warning C4477: 'sscanf_s' : format string '%d' requires an argument of type 'int *', but variadic argument 1 has type 'short *'
+E:\Documents\Jobs\CompNeuro\beta\beta\beta_main.cpp(1023,22): message : consider using '%hd' in the format string
+E:\Documents\Jobs\CompNeuro\beta\beta\beta_main.cpp(1058,22): warning C4477: 'sscanf_s' : format string '%d' requires an argument of type 'int *', but variadic argument 1 has type 'short *'
+E:\Documents\Jobs\CompNeuro\beta\beta\beta_main.cpp(1058,22): message : consider using '%hd' in the format string
+E:\Documents\Jobs\CompNeuro\beta\beta\beta_main.cpp(1187,14): warning C4244: '=': conversion from 'float' to 'short', possible loss of data
+E:\Documents\Jobs\CompNeuro\beta\beta\beta_main.cpp(1196,14): warning C4244: '=': conversion from 'float' to 'short', possible loss of data
+  extApi.cpp
+  extApiPlatform.cpp
+  Adding library: Winmm.lib
+  Adding library: Ws2_32.lib
+  Generating Code...
+     Creating library E:\Documents\Jobs\CompNeuro\beta\Debug\beta.lib and object E:\Documents\Jobs\CompNeuro\beta\Debug\beta.exp
+  beta.vcxproj -> E:\Documents\Jobs\CompNeuro\beta\Debug\beta.exe
